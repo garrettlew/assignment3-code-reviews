@@ -90,8 +90,6 @@ def main():
         print(f"Saved plot to {plot_svm_data(args.output)}")
     else:
         print("Support vector point IDs:", identify_support_vectors())
-        weights, bias, margin = derive_svm_separator()
-        print(f"Weights: {weights}; bias: {bias}; geometric margin: {margin}")
 
 
 if __name__ == "__main__":

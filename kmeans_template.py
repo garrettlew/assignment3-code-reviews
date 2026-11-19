@@ -131,52 +131,6 @@ def plot_clustering(X, centroids, assignments, title, path):
     plt.close(fig)
 
 
-# def kmeans_history(data, centroids, max_iterations=100):
-#     """
-#     Record history of kmeans assignments and centroids
-#     """
-#     centroid_history = [centroids.astype(float)]
-#     assignment_history = []
-#     for _ in range(max_iterations):
-#         assignments = update_assignments(data, centroids)
-#         centroids = update_centroids(data, centroids, assignments)
-#         assignment_history.append(assignments)
-#         centroid_history.append(centroids)
-#     assignment_history.append(update_assignments(data, centroids))
-#     return centroid_history, assignment_history
-#
-#
-# def plot_steps(data, centroid_history, assignment_history, steps):
-#     """
-#     Plot kmeans history
-#     """
-#     path = np.stack(centroid_history)              # (T, k, d)
-#     k = path.shape[1]
-#     cols = 3
-#     rows = int(np.ceil(len(steps) / cols))
-#     fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 4 * rows),
-#                              sharex=True, sharey=True)
-#     axes = np.atleast_1d(axes).ravel()
-#
-#     for ax, t in zip(axes, steps):
-#         # points colored by current assignment
-#         ax.scatter(data[:, 0], data[:, 1], c=assignment_history[t],
-#                    cmap="tab10", vmin=0, vmax=9, s=5, alpha=0.6)
-#         # trail showing where each centroid has been
-#         for j in range(k):
-#             ax.plot(path[:t + 1, j, 0], path[:t + 1, j, 1], "k.-", lw=1)
-#         # current centroids as big X markers, colored to match their cluster
-#         ax.scatter(path[t, :, 0], path[t, :, 1], c=np.arange(k),
-#                    cmap="tab10", vmin=0, vmax=9, marker="X", s=200,
-#                    edgecolors="k")
-#         ax.set_title(f"Iteration {t}")
-#
-#     for ax in axes[len(steps):]:
-#         ax.axis("off")
-#     plt.tight_layout()
-#     plt.show()
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seed", type=int, default=0)
@@ -184,16 +138,8 @@ def main():
     parser.add_argument("--output-dir", type=Path,
                         default=Path(__file__).resolve().parent / "results" / "kmeans")
     args = parser.parse_args()
+    Path(args.output_dir).mkdir(parents=True, exist_ok=True)
     run_experiments(args.output_dir, args.seed, args.max_iterations)
-
-
-    # Visualizing history
-    # X, _ = make_toy_data()  # make_blobs returns (X, y), so unpack it
-    # rng = np.random.default_rng(0)
-    # init = get_initial_clusters(4, X, rng)
-    #
-    # cent_hist, assign_hist = kmeans_history(X, init, max_iterations=15)
-    # plot_steps(X, cent_hist, assign_hist, steps=[0, 1, 2, 3, 5, 15])
 
 
 if __name__ == "__main__":
